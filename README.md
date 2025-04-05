@@ -64,3 +64,6 @@ python main.py --dataset btad --data_path /path/to/your/dataset --backbone_arch 
 ```bash
 python main.py --dataset mvtec3d --data_path /path/to/your/dataset --backbone_arch xxx --rfeatures_path xxx --with_intra --with_inter --save_prefix xxx
 ```
+
+## Acknowledgements
+Thanks for the great efforts from [FOD](https://github.com/xcyao00/FOD).
