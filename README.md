@@ -23,8 +23,9 @@ In this work, we propose a novel anomaly detection framework called Emphasize Di
     <img src="8.png" width= "600">
 </p>
 
-## Dependenciestqdm == 4.66.6
+## Dependencies
 
+- tqdm == 4.66.6
 - numpy == 1.24.4
 - matplotlib == 3.5.0
 - scipy == 1.9.3
@@ -35,3 +36,30 @@ In this work, we propose a novel anomaly detection framework called Emphasize Di
 - torchvision == 0.14.1
 - timm == 0.6.12
 - huggingface-hub == 0.26.2
+
+## Creating Distance Maps
+```
+python create_distance_maps.py 
+```
+
+## Creating Reference Features
+# MVTecAD
+python create_ref_features.py --dataset mvtec --data_path /path/to/your/dataset --backbone_arch xxx --save_path xxx
+# BTAD
+python create_ref_features.py --dataset btad --data_path /path/to/your/dataset --backbone_arch xxx --save_path xxx
+# MVTec3D-RGB
+python create_ref_features.py --dataset mvtec3d --data_path /path/to/your/dataset --backbone_arch xxx --save_path xxx
+```
+
+
+## Training and Evaluating
+
+```bash
+python main.py --dataset mvtec --data_path /path/to/your/dataset --backbone_arch xxx --rfeatures_path xxx --with_intra --with_inter --save_prefix xxx
+```
+```bash
+python main.py --dataset btad --data_path /path/to/your/dataset --backbone_arch xxx --rfeatures_path xxx --with_intra --with_inter --save_prefix xxx
+```
+```bash
+python main.py --dataset mvtec3d --data_path /path/to/your/dataset --backbone_arch xxx --rfeatures_path xxx --with_intra --with_inter --save_prefix xxx
+```
