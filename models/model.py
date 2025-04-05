@@ -19,9 +19,9 @@ class DWConv(nn.Module):
     def forward(self, x):
         B, N, C = x.shape
         H = W = int(math.sqrt(N))
-        x = x.transpose(1, 2).view(B, C, H, W)  # 转换为 [B, C, H, W]
-        x = self.dwconv(x)  # 应用深度卷积
-        x = x.flatten(2).transpose(1, 2)  # 转换回 [B, N, C]
+        x = x.transpose(1, 2).view(B, C, H, W)  
+        x = self.dwconv(x)  
+        x = x.flatten(2).transpose(1, 2)  
         return x
 
 
@@ -37,7 +37,7 @@ class Mlp(nn.Module):
         out_features = out_features or in_features
         hidden_features = hidden_features or in_features
         self.fc1 = nn.Linear(in_features, hidden_features)
-        self.dwconv = DWConv(hidden_features)  # 添加深度卷积
+        self.dwconv = DWConv(hidden_features)  
         self.act = act_layer()
         self.scaling = nn.Parameter(torch.ones(hidden_features))
         self.fc2 = nn.Linear(hidden_features, out_features)
@@ -45,7 +45,7 @@ class Mlp(nn.Module):
 
     def forward(self, x):
         x = self.fc1(x)  # [B, N, hidden_features]
-        x = self.dwconv(x)  # 应用深度卷积
+        x = self.dwconv(x)  
         x = self.act(x)
         x = x + self.scaling * x.median(dim=1, keepdim=True).values
         x = self.drop(x)
@@ -65,8 +65,8 @@ class FeatureFusion(nn.Module):
         )
 
     def forward(self, new_x, ref_x):
-        # 拼接后通过MLP融合
-        fused_x = torch.cat([new_x, ref_x], dim=-1)  # 在最后一个维度上拼接
+        
+        fused_x = torch.cat([new_x, ref_x], dim=-1)  
         fused_x = self.fc(fused_x)
         return fused_x
 
@@ -87,7 +87,7 @@ class EncoderLayer(nn.Module):
         self.norm1 = nn.LayerNorm(d_model)
         self.norm2 = nn.LayerNorm(d_model)
         self.dropout = nn.Dropout(dropout)
-        # 使用MLP的拼接融合，输出特征数与d_model匹配
+        
         self.fusion = FeatureFusion(in_features=d_model, hidden_features=d_feed_foward, out_features=d_model)
 
     def forward(self, x, ref_x=None, with_intra=True, with_inter=True):
@@ -104,7 +104,7 @@ class EncoderLayer(nn.Module):
             )
             ref_x = x + self.dropout(new_ref_x)
 
-            # 使用拼接后的MLP融合
+            
             new_x = self.fusion(new_x, ref_x)
 
         elif with_inter:  # only inter correlation
