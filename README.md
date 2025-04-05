@@ -43,12 +43,13 @@ python create_distance_maps.py
 ```
 
 ## Creating Reference Features
-# MVTecAD
-python create_ref_features.py --dataset mvtec --data_path /path/to/your/dataset --backbone_arch xxx --save_path xxx
-# BTAD
-python create_ref_features.py --dataset btad --data_path /path/to/your/dataset --backbone_arch xxx --save_path xxx
-# MVTec3D-RGB
-python create_ref_features.py --dataset mvtec3d --data_path /path/to/your/dataset --backbone_arch xxx --save_path xxx
+```bash
+#  MVTecAD
+python create_ref_features.py --dataset mvtec --data_path /path/to/your/dataset --backbone_arch wide_resnet50_2 --save_path rfeatures_w50
+#  BTAD
+python create_ref_features.py --dataset btad --data_path /path/to/your/dataset --backbone_arch wide_resnet50_2 --save_path rfeatures_w50
+#  MVTec3D-RGB
+python create_ref_features.py --dataset mvtec3d --data_path /path/to/your/dataset --backbone_arch wide_resnet50_2 --save_path rfeatures_w50
 ```
 
 
