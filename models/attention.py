@@ -16,7 +16,7 @@ class Attention2D(nn.Module):
                  scale_factor=None,
                  dropout=0.0,
                  device=torch.device('cuda'),
-                 use_relative_position=False):  # 新增参数控制相对位置偏置
+                 use_relative_position=False):  
         super(Attention2D, self).__init__()
 
         self.seq_len = seq_len
@@ -26,7 +26,7 @@ class Attention2D(nn.Module):
         self.dropout = nn.Dropout(dropout)
         self.num_heads = num_heads
         self.device = device
-        self.use_relative_position = use_relative_position  # 是否启用相对位置偏置
+        self.use_relative_position = use_relative_position  
 
         self.query_projection = nn.Linear(d_model, d_model)
         self.key_projection = nn.Linear(d_model, d_model)
@@ -41,8 +41,8 @@ class Attention2D(nn.Module):
         self.distances_x = distances_x.to(device)
         self.distances_y = distances_y.to(device)
 
-        if use_relative_position:  # 如果启用相对位置偏置
-            # 相对位置偏置初始化
+        if use_relative_position:  
+            
             points = list(itertools.product(range(self.width), range(self.width)))
             N = len(points)
             attention_offsets = {}
@@ -54,7 +54,7 @@ class Attention2D(nn.Module):
                         attention_offsets[offset] = len(attention_offsets)
                     idxs.append(attention_offsets[offset])
 
-            # 偏置参数矩阵和索引
+            
             self.attention_biases = nn.Parameter(torch.zeros(num_heads, len(attention_offsets)))
             self.register_buffer('attention_bias_idxs', torch.LongTensor(idxs).view(N, N))
 
@@ -70,7 +70,7 @@ class Attention2D(nn.Module):
 
         scores = torch.einsum("blhe,bshe->bhls", query, key)
 
-        # 根据条件添加相对位置偏置
+        
         if self.use_relative_position:
             scores = self.scale_factor * scores
             scores += self.attention_biases[:, self.attention_bias_idxs]
